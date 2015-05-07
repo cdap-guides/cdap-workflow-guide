@@ -2,10 +2,12 @@
 Batch Data Processing in CDAP using Workflow
 ============================================
 
-The Workflow system in `Cask Data Application Platform (CDAP) <http://cdap.io>`__ allows specifying, executing,
- scheduling, and monitoring complex series of jobs and tasks. In this guide, you will learn how it can facilitate
- the execution of `MapReduce <http://research.google.com/archive/mapreduce.html>`__ programs in parallel based
- on the evaluation of the boolean predicate.
+The Workflow system in
+ `Cask Data Application Platform (CDAP) <http://cdap.io>`__
+ allows specifying, executing, scheduling, and monitoring complex series of jobs
+ and tasks. In this guide, you will learn how it can facilitate the execution of
+ `MapReduce <http://research.google.com/archive/mapreduce.html>`__
+ programs in parallel based on the evaluation of the boolean predicate.
 
 What You Will Build
 ===================
@@ -17,20 +19,20 @@ the total purchases made by user along with the total purchases made for the par
 
 You will:
 
-- Build a
+- Build ``PurchaseEventParser``, a
   `MapReduce program <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
-  ``PurchaseEventParser`` to parse the raw purchase events and create ``Purchase`` objects for them;
-- Build a
+  to parse the raw purchase events and create ``Purchase`` objects for them;
+- Build ``PurchaseCounterByUser``, a
   `MapReduce program <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
-  ``PurchaseCounterByUser`` to count the purchases made per user;
-- Build a
+  to count the purchases made per user;
+- Build ``PurchaseCounterByProduct``, a
   `MapReduce program <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
-  ``PurchaseCounterByProduct`` to count the purchases made for per product;
-- Build a
+  to count the purchases made per product;
+- Build ``PurchaseWorkflow``, a
   `Workflow program <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/workflows.html>`__
-  which will first execute the MapReduce program ``PurchaseEventParser``. Then if the predicate
-   ``PurchaseEventVerifier`` evaluates to true, it will parallely executes the MapReduce programs ``PurchaseCounterByUser``
-    and ``PurchaseCounterByProduct``, otherwise it will executes action ``EmailNotifier``;
+  which will first execute the MapReduce program ``PurchaseEventParser``. Then if the predicate ``PurchaseEventVerifier``
+   evaluates to true, will parallely execute the MapReduce programs ``PurchaseCounterByUser`` and
+   ``PurchaseCounterByProduct``, otherwise it will execute action ``EmailNotifier``;
 - Use a
   `Dataset <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/datasets/index.html>`__
   to persist results of the MapReduce programs; and
