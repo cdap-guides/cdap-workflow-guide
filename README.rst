@@ -30,8 +30,8 @@ You will:
 - Build ``PurchaseWorkflow``, a
   `Workflow program <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/workflows.html>`__
   which will first execute the MapReduce program ``PurchaseEventParser``. Then if the predicate ``PurchaseEventVerifier``
-   evaluates to true, will parallely execute the MapReduce programs ``PurchaseCounterByUser`` and
-   ``PurchaseCounterByProduct``, otherwise it will execute action ``EmailNotifier``;
+  evaluates to true, will parallely execute the MapReduce programs ``PurchaseCounterByUser`` and
+  ``PurchaseCounterByProduct``, otherwise it will execute action ``EmailNotifier``;
 - Use a
   `Dataset <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/datasets/index.html>`__
   to persist results of the MapReduce programs; and
@@ -64,11 +64,10 @@ in realtime or in batches; whichever way, it doesn’t affect the ability
 of the MapReduce programs to consume them.
 
 The ``PurchaseWorkflow`` encapsulates set of MapReduce programs, which extracts the required information from the
- raw purchase events and computes the total purchases made by the particular user and total purchases made for
-the particular product in a specific time range. The results of the computation are persisted in a Dataset.
+raw purchase events and computes the total purchases made by the particular user and total purchases made for the
+particular product in a specific time range. The results of the computation are persisted in a Dataset.
 
-Finally, the application contains a Service that exposes an HTTP
-endpoint to access the data stored in the Dataset.
+Finally, the application contains a Service that exposes an HTTP endpoint to access the data stored in the Dataset.
 
 .. image:: docs/images/app-design.png
    :width: 8in
@@ -127,18 +126,18 @@ application, we will process the events in batch using the
 ``PurchaseWorkflow`` program and compute the total purchases made by the particular user
 and total purchases made for the particular product in a specific time range. We will use three MapReduce
 programs ``PurchaseEventParser``, ``PurchaseCounterByUser``, and ``PurchaseCounterByProduct`` to apply
- different processing on the purchase events and Workflow ``PurchaseWorkflow`` to connect these MapReduce
+different processing on the purchase events and Workflow ``PurchaseWorkflow`` to connect these MapReduce
 programs in a desired fashion.
 
 The result of the Workflow execution is persisted into a Dataset; the
 application uses the ``createDataset`` method to define the Dataset. We use three datasets,
- ``purchaseRecords`` to store the valid parsed purchase events, ``userPurchases`` to store the total purchases
+``purchaseRecords`` to store the valid parsed purchase events, ``userPurchases`` to store the total purchases
 made by particular user, and ``productPurchases`` to store the total purchases made for per product.
 The ``Purchase`` class defines the type used to store the parsed purchase events.
 
 The application also adds a custom Workflow action ``EmailNotifier``. When Workflow executes a custom action,
 the ``run`` method in it gets invoked. In ``EmailNotifier``, we only add a log statement, however it can be
- customized to send emails to the concerned parties.
+customized to send emails to the concerned parties.
 
 Finally, the application adds a service for querying the results from the Dataset.
 
@@ -176,8 +175,8 @@ MapReduce program ``PurchaseEventParser``. This program will parse the raw purch
 objects from it. After this, we add ``condition`` in the Workflow, which takes a predicate ``PurchaseEventVerifier``.
 If the predicate evaluates to true, we `fork` the execution of the Workflow into two parallel branches.
 One branch executes the ``PurchaseCounterByUser`` MapReduce program, while other executes the
- ``PurchaseCounterByProduct`` MapReduce program. If the predicate evaluates to false, then the programs added
- in the ``otherwise`` section will get executed. We have added one dummy custom action, ``EmailNotifier()`` to the
+``PurchaseCounterByProduct`` MapReduce program. If the predicate evaluates to false, then the programs added
+in the ``otherwise`` section will get executed. We have added one dummy custom action, ``EmailNotifier()`` to the
 ``otherwise`` section.
 
 Lets take a closer look at the predicate ``PurchaseEventVerifier``.
@@ -223,7 +222,7 @@ the previous MapReduce program (in our case ``PurchaseEventParser``) can be retr
 ``workflowContext`` object. We query for the number of input records to the mapper and number of records
 emitted by the mapper. If at least 80% of the records were processed by the mapper, the method returns true,
 in which case the `fork` in the Workflow will get executed. If the method returns false, ``otherwise`` section in
- the ``condition`` gets executed, which contains ``EmailNotifier`` custom action.
+the ``condition`` gets executed, which contains ``EmailNotifier`` custom action.
 
 
 Build and Run Application
@@ -267,21 +266,21 @@ results::
 
   $ cdap-cli.sh start service PurchaseWorkflowApp.PurchaseResultService
 
-- Get purchase records for user ``joe``
+- Get purchase records for user ``joe``::
   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchaserecords/joe
 
 Example output::
 
   [{"customer":"joe","product":"pineapple","quantity":10,"price":20,"purchaseTime":1430962917227},{"customer":"joe","product":"apple","quantity":1,"price":100,"purchaseTime":1430962917227}]
 
-- Get the total purchases made by user ``joe``
+- Get the total purchases made by user ``joe``::
   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/users/joe
 
 Example output::
 
   120
 
-- Get the total purchases made for product ``apple``
+- Get the total purchases made for product ``apple``::
   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/products/apple
 
 Example output::
