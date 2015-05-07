@@ -2,12 +2,11 @@
 Batch Data Processing in CDAP using Workflow
 ============================================
 
-The Workflow system in
- `Cask Data Application Platform (CDAP) <http://cdap.io>`__
- allows specifying, executing, scheduling, and monitoring complex series of jobs
- and tasks. In this guide, you will learn how it can facilitate the execution of
- `MapReduce <http://research.google.com/archive/mapreduce.html>`__
- programs in parallel based on the evaluation of the boolean predicate.
+The Workflow system in `Cask Data Application Platform (CDAP) <http://cdap.io>`__
+allows specifying, executing, scheduling, and monitoring complex series of jobs
+and tasks. In this guide, you will learn how it can facilitate the execution of
+`MapReduce <http://research.google.com/archive/mapreduce.html>`__
+programs in parallel based on the evaluation of the boolean predicate.
 
 What You Will Build
 ===================
