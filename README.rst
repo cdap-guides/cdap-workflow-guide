@@ -267,6 +267,7 @@ results::
   $ cdap-cli.sh start service PurchaseWorkflowApp.PurchaseResultService
 
 - Get purchase records for user ``joe``::
+
   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchaserecords/joe
 
 Example output::
@@ -274,6 +275,7 @@ Example output::
   [{"customer":"joe","product":"pineapple","quantity":10,"price":20,"purchaseTime":1430962917227},{"customer":"joe","product":"apple","quantity":1,"price":100,"purchaseTime":1430962917227}]
 
 - Get the total purchases made by user ``joe``::
+
   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/users/joe
 
 Example output::
@@ -281,6 +283,7 @@ Example output::
   120
 
 - Get the total purchases made for product ``apple``::
+
   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/products/apple
 
 Example output::
