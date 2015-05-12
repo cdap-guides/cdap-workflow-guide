@@ -208,13 +208,11 @@ Lets take a closer look at the predicate ``PurchaseEventVerifier``.
 
       Map<String, Long> taskCounter = hadoopCounters.get("org.apache.hadoop.mapreduce.TaskCounter");
 
-      long mapInputRecordNumber = taskCounter.get("MAP_INPUT_RECORDS");
-      long mapOutputRecordNumber = taskCounter.get("MAP_OUTPUT_RECORDS");
-
-      // Return true if at least 80% of the records were processed by previous map job
-      if (mapOutputRecordNumber >= (mapInputRecordNumber * 80/100)) {
-        System.out.println("returning true!");
-        return true;
+      if (taskCounter.containsKey("MAP_INPUT_RECORDS")) {
+        long mapInputRecordNumber = taskCounter.get("MAP_INPUT_RECORDS");
+        long mapOutputRecordNumber = taskCounter.get("MAP_OUTPUT_RECORDS");
+        // Return true if at least 80% of the records were processed by previous map job
+        return (mapOutputRecordNumber >= (mapInputRecordNumber * 80/100));
       }
 
       return false;
