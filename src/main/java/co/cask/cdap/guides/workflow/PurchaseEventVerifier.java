@@ -29,10 +29,13 @@ public class PurchaseEventVerifier implements Predicate<WorkflowContext> {
 
     Map<String, Long> taskCounter = hadoopCounters.get("org.apache.hadoop.mapreduce.TaskCounter");
 
-    long mapInputRecordNumber = taskCounter.get("MAP_INPUT_RECORDS");
-    long mapOutputRecordNumber = taskCounter.get("MAP_OUTPUT_RECORDS");
+    if (taskCounter.containsKey("MAP_INPUT_RECORDS")) {
+      long mapInputRecordNumber = taskCounter.get("MAP_INPUT_RECORDS");
+      long mapOutputRecordNumber = taskCounter.get("MAP_OUTPUT_RECORDS");
+      // Return true if at least 80% of the records were processed by previous map job
+      return (mapOutputRecordNumber >= (mapInputRecordNumber * 80/100));
+    }
 
-    // Return true if at least 80% of the records were processed by previous map job
-    return (mapOutputRecordNumber >= (mapInputRecordNumber * 80/100));
+    return false;
   }
 }

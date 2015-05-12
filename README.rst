@@ -110,6 +110,9 @@ and overrides the ``configure()`` method to define all of the application compon
       addMapReduce(new PurchaseCounterByProduct());
       addWorkflow(new PurchaseWorkflow());
 
+      scheduleWorkflow(Schedules.createTimeSchedule("HourlySchedule", "Schedule execution every 1 hour", "0 * * * *"),
+                       "PurchaseWorkflow");
+
       addService(new PurchaseResultService());
 
       createDataset("purchaseRecords", KeyValueTable.class);
@@ -138,6 +141,8 @@ The ``Purchase`` class defines the type used to store the parsed purchase events
 The application also adds a custom Workflow action ``EmailNotifier``. When Workflow executes a custom action,
 the ``run`` method in it gets invoked. In ``EmailNotifier``, we only add a log statement, however it can be
 customized to send emails to the concerned parties.
+
+The ``PurchaseWorkflow`` is scheduled to execute every one hour.
 
 Finally, the application adds a service for querying the results from the Dataset.
 

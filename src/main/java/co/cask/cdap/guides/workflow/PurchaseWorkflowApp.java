@@ -3,6 +3,7 @@ package co.cask.cdap.guides.workflow;
 import co.cask.cdap.api.app.AbstractApplication;
 import co.cask.cdap.api.data.stream.Stream;
 import co.cask.cdap.api.dataset.lib.KeyValueTable;
+import co.cask.cdap.api.schedule.Schedules;
 
 /**
  * Workflow application explaining fork and condition nodes in the Workflow.
@@ -19,6 +20,9 @@ public class PurchaseWorkflowApp extends AbstractApplication {
     addMapReduce(new PurchaseCounterByUser());
     addMapReduce(new PurchaseCounterByProduct());
     addWorkflow(new PurchaseWorkflow());
+
+    scheduleWorkflow(Schedules.createTimeSchedule("HourlySchedule", "Schedule execution every 1 hour", "0 * * * *"),
+                     "PurchaseWorkflow");
 
     addService(new PurchaseResultService());
 
