@@ -100,7 +100,7 @@ and overrides the ``configure()`` method to define all of the application compon
   public class PurchaseWorkflowApp extends AbstractApplication {
     @Override
     public void configure() {
-      setName("WorkflowApp");
+      setName("PurchaseWorkflowApp");
       setDescription("Application describing the Workflow");
 
       addStream(new Stream("purchaseEvents"));
@@ -120,7 +120,7 @@ and overrides the ``configure()`` method to define all of the application compon
       createDataset("productPurchases", KeyValueTable.class);
     }
   }
-
+  
 The ``PurchaseWorkflowApp`` application defines a new `Stream
 <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/streams.html>`__
 where purchase events are ingested. Once the data is
