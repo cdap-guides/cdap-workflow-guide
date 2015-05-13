@@ -95,7 +95,7 @@ standard Maven project structure for all of the source code files::
 The CDAP application is identified by the ``PurchaseWorkflowApp`` class. This
 class extends an `AbstractApplication
 <http://docs.cdap.io/cdap/current/en/reference-manual/javadocs/co/cask/cdap/api/app/AbstractApplication.html>`__,
-and overrides the ``configure()`` method to define all of the application components:
+and overrides the ``configure`` method to define all of the application components:
 
 .. code:: java
 
@@ -152,7 +152,7 @@ Let's take a closer look at the Workflow.
 
 The ``PurchaseWorkflow`` extends an `AbstractWorkflow
 <http://docs.cdap.io/cdap/current/en/reference-manual/javadocs/co/cask/cdap/api/workflow/AbstractWorkflow.html>`__
-class and overrides the ``configure()`` method:
+class and overrides the ``configure`` method:
 
 .. code:: java
 
@@ -176,7 +176,7 @@ class and overrides the ``configure()`` method:
     }
   }
 
-In the ``configure()`` method we specify the topology for connecting the programs which will run as a part of
+In the ``configure`` method we specify the topology for connecting the programs which will run as a part of
 the Workflow execution. As the first action in the ``PurchaseWorkflow``, we add the MapReduce program
 ``PurchaseEventParser``. This program will parse raw purchase events and create ``Purchase`` objects from them.
 
@@ -186,7 +186,7 @@ One branch executes the ``PurchaseCounterByCustomer`` MapReduce program, while t
 ``PurchaseCounterByProduct`` MapReduce program.
 
 If the predicate evaluates to false, then actions in the ``otherwise`` section will be executed.
-We have added a single custom action, ``ProblemLogger()`` to the ``otherwise`` section as an example
+We have added a single custom action, ``ProblemLogger`` to the ``otherwise`` section as an example
 of what is possible.
 
 Lets take a closer look at the predicate ``PurchaseEventVerifier``.
