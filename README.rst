@@ -1,6 +1,6 @@
-============================================
-Batch Data Processing in CDAP using Workflow
-============================================
+=================================================================
+Parallel Execution of the Actions based on Condition in Workflow
+=================================================================
 
 The Workflow system in `Cask Data Application Platform (CDAP) <http://cdap.io>`__
 allows specifying, executing, scheduling, and monitoring complex series of jobs
@@ -13,8 +13,9 @@ What You Will Build
 
 This guide will take you through building a
 `CDAP application <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/applications.html>`__
-that uses ingested raw purchase events (of the form '``<name> bought <n> <item>s for $<price>``') to compute
-in parallel the total purchases made by a customer along with the total purchases made for a each product.
+that uses ingested raw purchase events (of the form '``<name> bought <n> <item>s for $<price>``', which are parsed
+using a primitive parser for sentences) to compute in parallel the total purchases made by a customer along with
+the total purchases made for a each product.
 
 You will:
 

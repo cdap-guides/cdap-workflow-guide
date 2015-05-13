@@ -48,7 +48,7 @@ public class PurchaseEventParser extends AbstractMapReduce {
   }
 
   // Mapper class to parse the raw purchase events and emit customer and corresponding purchase objects.
-  public static class PurchaseEventParserMapper extends Mapper<LongWritable, Text, Text, Text>  {
+  public static class PurchaseEventParserMapper extends Mapper<LongWritable, Text, Text, Purchase>  {
 
     @Override
     public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
@@ -57,22 +57,22 @@ public class PurchaseEventParser extends AbstractMapReduce {
       if (!logEvent.isEmpty()) {
         Purchase purchase = Purchase.parse(logEvent);
         if (purchase != null) {
-          context.write(new Text(purchase.getCustomer()), new Text(new Gson().toJson(purchase)));
+          context.write(new Text(purchase.getCustomer()), purchase);
         }
       }
     }
   }
 
   // Reducer class to aggregate and store the customer purchases into the datasets.
-  public static class PurchaseEventParserReducer extends Reducer<Text, Text, byte[], byte[]>
+  public static class PurchaseEventParserReducer extends Reducer<Text, Purchase, byte[], byte[]>
     implements ProgramLifecycle<MapReduceContext> {
 
     @Override
-    public void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
+    public void reduce(Text key, Iterable<Purchase> values, Context context) throws IOException,
       InterruptedException {
       List<Purchase> purchases = Lists.newArrayList();
-      for (Text val : values) {
-        purchases.add(new Gson().fromJson(val.toString(), Purchase.class));
+      for (Purchase val : values) {
+        purchases.add(val);
       }
       context.write(Bytes.toBytes(key.toString()),
                     Bytes.toBytes(new Gson().toJson(purchases, Purchase.LIST_PURCHASE_TYPE)));
