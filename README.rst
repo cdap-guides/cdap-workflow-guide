@@ -146,7 +146,7 @@ customized to send emails to the concerned parties.
 
 The ``PurchaseWorkflow`` is scheduled to execute every hour.
 
-Finally, the application adds a service for querying the results from the Dataset.
+Finally, the application adds a service for querying the results from the Datasets.
 
 Let's take a closer look at the Workflow.
 
