@@ -4,24 +4,24 @@ import co.cask.cdap.api.workflow.AbstractWorkflow;
 
 /**
  * Workflow for processing purchase events and computing total purchases made by
- * a particular user and total purchases for a particular product.
+ * a each customer and total purchases for a each product.
  */
 public class PurchaseWorkflow extends AbstractWorkflow {
   @Override
   protected void configure() {
     setName("PurchaseWorkflow");
-    setDescription("Workflow to parse the purchase events and count the purchases per user and per product");
+    setDescription("Workflow to parse the purchase events and count the purchases per customer and per product");
 
     addMapReduce("PurchaseEventParser");
 
     condition(new PurchaseEventVerifier())
       .fork()
-        .addMapReduce("PurchaseCounterByUser")
+        .addMapReduce("PurchaseCounterByCustomer")
       .also()
         .addMapReduce("PurchaseCounterByProduct")
       .join()
     .otherwise()
-      .addAction(new EmailNotifier())
+      .addAction(new ProblemLogger())
     .end();
   }
 }

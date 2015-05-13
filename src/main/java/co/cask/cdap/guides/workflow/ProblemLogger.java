@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 /**
  * This is a dummy action in the Workflow that could be used to send email notifications.
  */
-public class EmailNotifier extends AbstractWorkflowAction {
+public class ProblemLogger extends AbstractWorkflowAction {
 
-  private static final Logger LOG = LoggerFactory.getLogger(EmailNotifier.class);
+  private static final Logger LOG = LoggerFactory.getLogger(ProblemLogger.class);
 
   @Override
   public void run() {

@@ -15,36 +15,36 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * MapReduce program to compute total purchases by user.
+ * MapReduce program to compute total purchases by customer.
  */
-public class PurchaseCounterByUser extends AbstractMapReduce {
+public class PurchaseCounterByCustomer extends AbstractMapReduce {
 
   @Override
   public void configure() {
-    setDescription("Purchases Counter by User");
+    setDescription("Purchases Counter by Customer");
     setInputDataset("purchaseRecords");
-    setOutputDataset("userPurchases");
+    setOutputDataset("customerPurchases");
   }
 
   @Override
   public void beforeSubmit(MapReduceContext context) throws Exception {
     Job job = context.getHadoopJob();
-    job.setMapperClass(PerUserMapper.class);
-    job.setReducerClass(PerUserReducer.class);
+    job.setMapperClass(PerCustomerMapper.class);
+    job.setReducerClass(PerCustomerReducer.class);
   }
 
   /**
-   * Mapper class to emit user and corresponding purchase count information.
+   * Mapper class to emit customer and corresponding purchase count information.
    */
-  public static class PerUserMapper extends Mapper<byte[], byte[], Text, LongWritable> {
+  public static class PerCustomerMapper extends Mapper<byte[], byte[], Text, LongWritable> {
 
     @Override
     public void map(byte[] key, byte[] value, Context context)
       throws IOException, InterruptedException {
       String purchaseJson = Bytes.toString(value);
-      List<Purchase> userPurchases = new Gson().fromJson(purchaseJson, Purchase.LIST_PURCHASE_TYPE);
+      List<Purchase> customerPurchases = new Gson().fromJson(purchaseJson, Purchase.LIST_PURCHASE_TYPE);
       long purchaseValue = 0;
-      for (Purchase p : userPurchases) {
+      for (Purchase p : customerPurchases) {
         purchaseValue += p.getPrice();
       }
       context.write(new Text(Bytes.toString(key)), new LongWritable(purchaseValue));
@@ -52,9 +52,9 @@ public class PurchaseCounterByUser extends AbstractMapReduce {
   }
 
   /**
-   * Reducer class to aggregate all purchases per user.
+   * Reducer class to aggregate all purchases per customer.
    */
-  public static class PerUserReducer extends Reducer<Text, LongWritable, byte[], byte[]>
+  public static class PerCustomerReducer extends Reducer<Text, LongWritable, byte[], byte[]>
     implements ProgramLifecycle<MapReduceContext> {
 
     @Override
@@ -63,13 +63,13 @@ public class PurchaseCounterByUser extends AbstractMapReduce {
     }
 
     @Override
-    public void reduce(Text user, Iterable<LongWritable> values, Context context)
+    public void reduce(Text customer, Iterable<LongWritable> values, Context context)
       throws IOException, InterruptedException {
       int totalPurchase = 0;
       for (LongWritable val : values) {
         totalPurchase += val.get();
       }
-      context.write(Bytes.toBytes(user.toString()), Bytes.toBytes(totalPurchase));
+      context.write(Bytes.toBytes(customer.toString()), Bytes.toBytes(totalPurchase));
     }
 
     @Override

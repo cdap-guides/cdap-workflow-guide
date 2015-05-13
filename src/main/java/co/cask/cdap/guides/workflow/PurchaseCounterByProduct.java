@@ -44,8 +44,8 @@ public class PurchaseCounterByProduct extends AbstractMapReduce {
     public void map(byte[] key, byte[] value, Context context)
       throws IOException, InterruptedException {
       String purchaseJson = Bytes.toString(value);
-      List<Purchase> userPurchases = new Gson().fromJson(purchaseJson, Purchase.LIST_PURCHASE_TYPE);
-      for (Purchase p : userPurchases) {
+      List<Purchase> customerPurchases = new Gson().fromJson(purchaseJson, Purchase.LIST_PURCHASE_TYPE);
+      for (Purchase p : customerPurchases) {
         context.write(new Text(p.getProduct()), new LongWritable(p.getPrice()));
       }
     }

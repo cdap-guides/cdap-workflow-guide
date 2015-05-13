@@ -47,7 +47,7 @@ public class PurchaseEventParser extends AbstractMapReduce {
     StreamBatchReadable.useStreamInput(context, "purchaseEvents", startTime, endTime);
   }
 
-  // Mapper class to parse the raw purchase events and emit user and corresponding purchase objects.
+  // Mapper class to parse the raw purchase events and emit customer and corresponding purchase objects.
   public static class PurchaseEventParserMapper extends Mapper<LongWritable, Text, Text, Text>  {
 
     @Override
@@ -63,7 +63,7 @@ public class PurchaseEventParser extends AbstractMapReduce {
     }
   }
 
-  // Reducer class to aggregate and store the user purchases into the datasets.
+  // Reducer class to aggregate and store the customer purchases into the datasets.
   public static class PurchaseEventParserReducer extends Reducer<Text, Text, byte[], byte[]>
     implements ProgramLifecycle<MapReduceContext> {
 

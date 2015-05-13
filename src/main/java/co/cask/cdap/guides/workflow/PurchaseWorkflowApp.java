@@ -17,7 +17,7 @@ public class PurchaseWorkflowApp extends AbstractApplication {
     addStream(new Stream("purchaseEvents"));
 
     addMapReduce(new PurchaseEventParser());
-    addMapReduce(new PurchaseCounterByUser());
+    addMapReduce(new PurchaseCounterByCustomer());
     addMapReduce(new PurchaseCounterByProduct());
     addWorkflow(new PurchaseWorkflow());
 
@@ -27,7 +27,7 @@ public class PurchaseWorkflowApp extends AbstractApplication {
     addService(new PurchaseResultService());
 
     createDataset("purchaseRecords", KeyValueTable.class);
-    createDataset("userPurchases", KeyValueTable.class);
+    createDataset("customerPurchases", KeyValueTable.class);
     createDataset("productPurchases", KeyValueTable.class);
   }
 }

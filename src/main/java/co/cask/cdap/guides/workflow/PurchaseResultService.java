@@ -13,14 +13,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 
 /**
- * Service handling the requests for the purchase records for users and products.
+ * Service handling the requests for the purchase records for customers and products.
  */
 public class PurchaseResultService extends AbstractService {
 
   @Override
   protected void configure() {
     setName("PurchaseResultService");
-    setDescription("Service to query for the purchases made by user and product.");
+    setDescription("Service to query for the purchases made by customer and product.");
     addHandler(new PurchaseResultServiceHandler());
   }
 
@@ -29,17 +29,17 @@ public class PurchaseResultService extends AbstractService {
     @UseDataSet("productPurchases")
     private KeyValueTable productPurchases;
 
-    @UseDataSet("userPurchases")
-    private KeyValueTable userPurchases;
+    @UseDataSet("customerPurchases")
+    private KeyValueTable customerPurchases;
 
     @UseDataSet("purchaseRecords")
     private KeyValueTable purchaseRecords;
 
     @GET
-    @Path("purchaserecords/{user-id}")
+    @Path("purchaserecords/{customer-id}")
     public void getPurchaseRecord(HttpServiceRequest request, HttpServiceResponder responder,
-                                  @PathParam("user-id") String userId) {
-      byte[] value = purchaseRecords.read(userId);
+                                  @PathParam("customer-id") String customerId) {
+      byte[] value = purchaseRecords.read(customerId);
       if (value == null) {
         responder.sendStatus(404);
         return;
@@ -60,10 +60,10 @@ public class PurchaseResultService extends AbstractService {
     }
 
     @GET
-    @Path("purchases/users/{user-id}")
-    public void getPurchasesByUser(HttpServiceRequest request, HttpServiceResponder responder,
-                                   @PathParam("user-id") String userId) {
-      byte[] value = userPurchases.read(userId);
+    @Path("purchases/customers/{customer-id}")
+    public void getPurchasesByCustomer(HttpServiceRequest request, HttpServiceResponder responder,
+                                   @PathParam("customer-id") String customerId) {
+      byte[] value = customerPurchases.read(customerId);
       if (value == null) {
         responder.sendStatus(404);
         return;
