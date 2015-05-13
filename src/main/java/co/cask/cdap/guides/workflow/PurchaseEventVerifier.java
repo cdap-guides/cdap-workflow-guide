@@ -7,7 +7,7 @@ import co.cask.cdap.api.workflow.WorkflowToken;
 import java.util.Map;
 
 /**
- * Verifier that returns boolean value based on the number of records processed by the {@link PurchaseEventParser}
+ * Verifier that returns boolean value based on the number of records processed by the {@link PurchaseEventParser}.
  */
 public class PurchaseEventVerifier implements Predicate<WorkflowContext> {
 

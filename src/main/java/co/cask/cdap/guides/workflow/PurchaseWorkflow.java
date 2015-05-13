@@ -3,8 +3,8 @@ package co.cask.cdap.guides.workflow;
 import co.cask.cdap.api.workflow.AbstractWorkflow;
 
 /**
- * Workflow for processing purchase events and computing total purchases made by particular user and total purchases
- * done for the particular product.
+ * Workflow for processing purchase events and computing total purchases made by
+ * a particular user and total purchases for a particular product.
  */
 public class PurchaseWorkflow extends AbstractWorkflow {
   @Override

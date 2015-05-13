@@ -6,7 +6,7 @@ import co.cask.cdap.api.dataset.lib.KeyValueTable;
 import co.cask.cdap.api.schedule.Schedules;
 
 /**
- * Workflow application explaining fork and condition nodes in the Workflow.
+ * Workflow application demonstrating fork and condition nodes in a Workflow.
  */
 public class PurchaseWorkflowApp extends AbstractApplication {
   @Override

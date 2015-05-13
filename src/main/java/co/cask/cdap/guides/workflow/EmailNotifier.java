@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This is dummy action in the Workflow used to send email notification.
+ * This is a dummy action in the Workflow that could be used to send email notifications.
  */
 public class EmailNotifier extends AbstractWorkflowAction {
 
