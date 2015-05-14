@@ -72,7 +72,8 @@ public class PurchaseEventParser extends AbstractMapReduce {
       InterruptedException {
       List<Purchase> purchases = Lists.newArrayList();
       for (Purchase val : values) {
-        purchases.add(val);
+        purchases.add(new Purchase(val.getCustomer(), val.getProduct(), val.getQuantity(), val.getPrice(),
+                                   val.getPurchaseTime()));
       }
       context.write(Bytes.toBytes(key.toString()),
                     Bytes.toBytes(new Gson().toJson(purchases, Purchase.LIST_PURCHASE_TYPE)));

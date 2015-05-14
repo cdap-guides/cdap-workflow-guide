@@ -32,7 +32,8 @@ public class PurchaseEventVerifier implements Predicate<WorkflowContext> {
     if (taskCounter.containsKey("MAP_INPUT_RECORDS")) {
       long mapInputRecordNumber = taskCounter.get("MAP_INPUT_RECORDS");
       long mapOutputRecordNumber = taskCounter.get("MAP_OUTPUT_RECORDS");
-      // Return true if at least 80% of the records were processed by previous map job
+      // Return true if at least 80% of the records were successfully parsed and emitted
+      // by previous map job
       return (mapOutputRecordNumber >= (mapInputRecordNumber * 80/100));
     }
 
