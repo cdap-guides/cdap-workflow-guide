@@ -1,12 +1,12 @@
-=================================================================
-Parallel Execution of the Actions based on Condition in Workflow
-=================================================================
+==============================================
+Batch Data Processing with CDAP using Workflow
+==============================================
 
 The Workflow system in `Cask Data Application Platform (CDAP) <http://cdap.io>`__
 allows specifying, executing, scheduling, and monitoring complex series of jobs
-and tasks. In this guide, you will learn how it can facilitate the execution of
+and tasks. In this guide, you will learn how it can be used to execute the
 `MapReduce <http://research.google.com/archive/mapreduce.html>`__
-programs in parallel based on the evaluation of boolean predicates.
+programs in parallel based on the evaluation of conditions.
 
 What You Will Build
 ===================
