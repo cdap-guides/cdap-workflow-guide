@@ -66,7 +66,7 @@ in real time or in batches; whichever way, it doesn’t affect the ability
 of the MapReduce programs to consume them.
 
 The ``PurchaseWorkflow`` encapsulates the set of MapReduce programs, which extracts the required information from the
-raw purchase events and computes the total purchases made by each customer and total purchases made for a
+raw purchase events and computes the total purchases made by each customer and total purchases made for
 each product in a specific time range. The results of the computation are persisted in Datasets.
 
 Finally, the application contains a Service that exposes an HTTP endpoint to access the data stored in the Datasets.
@@ -129,7 +129,7 @@ where purchase events are ingested. Once the data is
 ingested, the events can be processed in real time or batch. In our
 application, we will process the events in batch using the
 ``PurchaseWorkflow`` program and compute the total purchases made by each customer
-and the total purchases made for a each product in a specific time range. We will use three MapReduce
+and the total purchases made for each product in a specific time range. We will use three MapReduce
 programs ``PurchaseEventParser``, ``PurchaseCounterByCustomer``, and ``PurchaseCounterByProduct`` to apply
 different processing on the purchase events and the Workflow ``PurchaseWorkflow`` to connect these MapReduce
 programs.
