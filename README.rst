@@ -128,7 +128,7 @@ The ``PurchaseWorkflowApp`` application defines a new `Stream
 where purchase events are ingested. Once the data is
 ingested, the events can be processed in real time or batch. In our
 application, we will process the events in batch using the
-``PurchaseWorkflow`` program and compute the total purchases made by a each customer
+``PurchaseWorkflow`` program and compute the total purchases made by each customer
 and the total purchases made for a each product in a specific time range. We will use three MapReduce
 programs ``PurchaseEventParser``, ``PurchaseCounterByCustomer``, and ``PurchaseCounterByProduct`` to apply
 different processing on the purchase events and the Workflow ``PurchaseWorkflow`` to connect these MapReduce
@@ -137,7 +137,7 @@ programs.
 The result of the Workflow execution is persisted into Datasets; the
 application uses the ``createDataset`` method to define the Dataset. We use three datasets:
 ``purchaseRecords`` to store the valid parsed purchase events; ``customerPurchases`` to store the total purchases
-made by a each customer; and ``productPurchases`` to store the total purchases made for each product.
+made by each customer; and ``productPurchases`` to store the total purchases made for each product.
 The ``Purchase`` class defines the type used to store the parsed purchase events.
 
 The application also adds a custom Workflow action ``ProblemLogger``. When a Workflow executes a custom action,
@@ -259,11 +259,11 @@ We can then deploy the application to the standalone CDAP installation::
 Next, we will send some sample purchase events into the stream
 for processing::
 
-  $ cdap-cli.sh send stream purchaseEvents \'bob bought 3 apples for \$30\'
-  $ cdap-cli.sh send stream purchaseEvents \'joe bought 1 apple for \$100\'
-  $ cdap-cli.sh send stream purchaseEvents \'joe bought 10 pineapples for \$20\'
-  $ cdap-cli.sh send stream purchaseEvents \'cat bought 3 bottles for \$12\'
-  $ cdap-cli.sh send stream purchaseEvents \'cat bought 2 pops for \$14\'
+  $ cdap-cli.sh send stream purchaseEvents '"bob bought 3 apples for $30"'
+  $ cdap-cli.sh send stream purchaseEvents '"joe bought 1 apple for $100"'
+  $ cdap-cli.sh send stream purchaseEvents '"joe bought 10 pineapples for $20"'
+  $ cdap-cli.sh send stream purchaseEvents '"cat bought 3 bottles for $12"'
+  $ cdap-cli.sh send stream purchaseEvents '"cat bought 2 pops for $14"'
 
 We can now start the Workflow to process the events that were
 ingested::
