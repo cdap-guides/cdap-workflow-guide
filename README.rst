@@ -14,8 +14,8 @@ What You Will Build
 This guide will take you through building a
 `CDAP application <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/applications.html>`__
 that uses ingested raw purchase events (of the form '``<name> bought <n> <item>s for $<price>``', which are parsed
-using a primitive parser for sentences) to compute in parallel the total purchases made by a customer along with
-the total purchases made for a each product.
+using a primitive parser for sentences) to compute in parallel the total purchases made by each customer along with
+the total purchases made for each product.
 
 You will:
 
@@ -66,7 +66,7 @@ in real time or in batches; whichever way, it doesn’t affect the ability
 of the MapReduce programs to consume them.
 
 The ``PurchaseWorkflow`` encapsulates the set of MapReduce programs, which extracts the required information from the
-raw purchase events and computes the total purchases made by a each customer and total purchases made for a
+raw purchase events and computes the total purchases made by each customer and total purchases made for a
 each product in a specific time range. The results of the computation are persisted in Datasets.
 
 Finally, the application contains a Service that exposes an HTTP endpoint to access the data stored in the Datasets.
@@ -171,14 +171,15 @@ class and overrides the ``configure`` method:
           .addMapReduce("PurchaseCounterByProduct")
         .join()
       .otherwise()
-        .addAction(new NotifyByEmail())
+        .addAction(new ProblemLogger())
       .end();
     }
   }
 
 In the ``configure`` method we specify the topology for connecting the programs which will run as a part of
 the Workflow execution. As the first action in the ``PurchaseWorkflow``, we add the MapReduce program
-``PurchaseEventParser``. This program will parse raw purchase events and create ``Purchase`` objects from them.
+``PurchaseEventParser``. This program will parse raw purchase events (using a primitive sentence parser) and
+create ``Purchase`` objects from them.
 
 After that, we add a ``condition`` in the Workflow, which takes a predicate ``PurchaseEventVerifier``.
 If the predicate evaluates to true, we ``fork`` the execution of the Workflow into two parallel branches.
@@ -298,7 +299,7 @@ results::
 
   Example output::
 
-   160
+   130
 
 You have now seen how to write a Workflow to connect different MapReduce programs and run them in
 parallel based on a condition.
