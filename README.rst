@@ -62,7 +62,7 @@ Application Design
 
 The application will assume that the purchase events are ingested
 into a Stream. The events can be ingested into a Stream continuously
-in real time or in batches; whichever way, it doesn’t affect the ability
+in real-time or in batches; whichever way, it doesn’t affect the ability
 of the MapReduce programs to consume them.
 
 The ``PurchaseWorkflow`` encapsulates the set of MapReduce programs, which extracts the required information from the
@@ -126,7 +126,7 @@ and overrides the ``configure`` method to define all of the application componen
 The ``PurchaseWorkflowApp`` application defines a new `Stream
 <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/streams.html>`__
 where purchase events are ingested. Once the data is
-ingested, the events can be processed in real time or batch. In our
+ingested, the events can be processed in real-time or batch. In our
 application, we will process the events in batch using the
 ``PurchaseWorkflow`` program and compute the total purchases made by each customer
 and the total purchases made for each product in a specific time range. We will use three MapReduce
