@@ -1,12 +1,11 @@
 package co.cask.cdap.guides.workflow;
 
 import co.cask.cdap.api.workflow.AbstractWorkflowAction;
+import co.cask.cdap.api.workflow.Value;
 import co.cask.cdap.api.workflow.WorkflowContext;
 import co.cask.cdap.api.workflow.WorkflowToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * This is a custom action in the Workflow that could be used to send email notifications.
@@ -43,16 +42,11 @@ public class ProblemLogger extends AbstractWorkflowAction {
 
     WorkflowToken token = context.getToken();
 
-    Map<String, Map<String, Long>> hadoopCounters = token.getMapReduceCounters();
-    if (hadoopCounters == null) {
+    Value counterValue = token.get(groupName + "." + counterName, WorkflowToken.Scope.SYSTEM);
+    if (counterValue == null) {
       return 0;
     }
 
-    Map<String, Long> taskCounter = hadoopCounters.get(groupName);
-
-    if (taskCounter.containsKey(counterName)) {
-      return taskCounter.get(counterName);
-    }
-    return 0;
+    return counterValue.getAsLong();
   }
 }

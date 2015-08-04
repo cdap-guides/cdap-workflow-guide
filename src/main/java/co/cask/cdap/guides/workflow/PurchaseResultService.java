@@ -16,10 +16,10 @@ import javax.ws.rs.PathParam;
  * Service handling the requests for the purchase records for customers and products.
  */
 public class PurchaseResultService extends AbstractService {
-
+  public static final String NAME = "PurchaseResultService";
   @Override
   protected void configure() {
-    setName("PurchaseResultService");
+    setName(NAME);
     setDescription("Service to query for the purchases made by customer and product.");
     addHandler(new PurchaseResultServiceHandler());
   }

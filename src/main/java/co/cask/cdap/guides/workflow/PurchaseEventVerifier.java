@@ -1,10 +1,9 @@
 package co.cask.cdap.guides.workflow;
 
 import co.cask.cdap.api.Predicate;
+import co.cask.cdap.api.workflow.Value;
 import co.cask.cdap.api.workflow.WorkflowContext;
 import co.cask.cdap.api.workflow.WorkflowToken;
-
-import java.util.Map;
 
 /**
  * Verifier that returns boolean value based on the number of records processed by the {@link PurchaseEventParser}.
@@ -22,21 +21,22 @@ public class PurchaseEventVerifier implements Predicate<WorkflowContext> {
       return false;
     }
 
-    Map<String, Map<String, Long>> hadoopCounters = token.getMapReduceCounters();
-    if (hadoopCounters == null) {
+    String taskCounterGroupName = "org.apache.hadoop.mapreduce.TaskCounter";
+    String mapInputRecordsCounterName = "MAP_INPUT_RECORDS";
+
+    Value mapInputRecords = token.get(taskCounterGroupName + "." + mapInputRecordsCounterName,
+                                      WorkflowToken.Scope.SYSTEM);
+
+    String mapOutputRecordsCounterName = "MAP_OUTPUT_RECORDS";
+    Value mapOutputRecords = token.get(taskCounterGroupName + "." + mapOutputRecordsCounterName,
+                                       WorkflowToken.Scope.SYSTEM);
+
+    if (mapInputRecords == null || mapOutputRecords == null) {
       return false;
     }
 
-    Map<String, Long> taskCounter = hadoopCounters.get("org.apache.hadoop.mapreduce.TaskCounter");
-
-    if (taskCounter.containsKey("MAP_INPUT_RECORDS")) {
-      long mapInputRecordNumber = taskCounter.get("MAP_INPUT_RECORDS");
-      long mapOutputRecordNumber = taskCounter.get("MAP_OUTPUT_RECORDS");
-      // Return true if at least 80% of the records were successfully parsed and emitted
-      // by previous map job
-      return (mapOutputRecordNumber >= (mapInputRecordNumber * 80/100));
-    }
-
-    return false;
+    // Return true if at least 80% of the records were successfully parsed and emitted
+    // by previous map job
+    return (mapOutputRecords.getAsLong() >= (mapInputRecords.getAsLong() * 80 / 100));
   }
 }
