@@ -22,8 +22,8 @@ public class PurchaseEventVerifier implements Predicate<WorkflowContext> {
     }
 
     String taskCounterGroupName = "org.apache.hadoop.mapreduce.TaskCounter";
-    String mapInputRecordsCounterName = "MAP_INPUT_RECORDS";
 
+    String mapInputRecordsCounterName = "MAP_INPUT_RECORDS";
     Value mapInputRecords = token.get(taskCounterGroupName + "." + mapInputRecordsCounterName,
                                       WorkflowToken.Scope.SYSTEM);
 
