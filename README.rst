@@ -207,22 +207,23 @@ Lets take a closer look at the predicate ``PurchaseEventVerifier``.
         return false;
       }
 
-      Map<String, Map<String, Long>> hadoopCounters = token.getMapReduceCounters();
-      if (hadoopCounters == null) {
+      String taskCounterGroupName = "org.apache.hadoop.mapreduce.TaskCounter";
+
+      String mapInputRecordsCounterName = "MAP_INPUT_RECORDS";
+      Value mapInputRecords = token.get(taskCounterGroupName + "." + mapInputRecordsCounterName,
+                                        WorkflowToken.Scope.SYSTEM);
+
+      String mapOutputRecordsCounterName = "MAP_OUTPUT_RECORDS";
+      Value mapOutputRecords = token.get(taskCounterGroupName + "." + mapOutputRecordsCounterName,
+                                         WorkflowToken.Scope.SYSTEM);
+
+      if (mapInputRecords == null || mapOutputRecords == null) {
         return false;
       }
 
-      Map<String, Long> taskCounter = hadoopCounters.get("org.apache.hadoop.mapreduce.TaskCounter");
-
-      if (taskCounter.containsKey("MAP_INPUT_RECORDS")) {
-        long mapInputRecordNumber = taskCounter.get("MAP_INPUT_RECORDS");
-        long mapOutputRecordNumber = taskCounter.get("MAP_OUTPUT_RECORDS");
-        // Return true if at least 80% of the records were successfully parsed and emitted
-        // by previous map job
-        return (mapOutputRecordNumber >= (mapInputRecordNumber * 80/100));
-      }
-
-      return false;
+      // Return true if at least 80% of the records were successfully parsed and emitted
+      // by previous map job
+      return (mapOutputRecords.getAsLong() >= (mapInputRecords.getAsLong() * 80 / 100));
     }
   }
 
