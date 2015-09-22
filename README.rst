@@ -254,7 +254,8 @@ If you haven't already started a standalone CDAP installation, start it with the
 
 We can then deploy the application to the standalone CDAP installation::
 
-  $ cdap-cli.sh deploy app target/cdap-workflow-guide-<version>.jar
+  $ cdap-cli.sh load artifact target/cdap-workflow-guide-<version>.jar
+  $ cdap-cli.sh create app PurchaseWorkflowApp cdap-workflow-guide <version> user
 
 Next, we will send some sample purchase events into the stream
 for processing::
