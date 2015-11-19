@@ -21,7 +21,9 @@ public class PurchaseWorkflowApp extends AbstractApplication {
     addMapReduce(new PurchaseCounterByProduct());
     addWorkflow(new PurchaseWorkflow());
 
-    scheduleWorkflow(Schedules.createTimeSchedule("HourlySchedule", "Schedule execution every 1 hour", "0 * * * *"),
+    scheduleWorkflow(Schedules.builder("HourlySchedule")
+                       .setDescription("Schedule execution every 1 hour")
+                       .createTimeSchedule("0 * * * *"),
                      "PurchaseWorkflow");
 
     addService(new PurchaseResultService());
