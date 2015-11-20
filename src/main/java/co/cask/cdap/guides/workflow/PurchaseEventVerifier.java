@@ -1,15 +1,18 @@
 package co.cask.cdap.guides.workflow;
 
 import co.cask.cdap.api.Predicate;
+import co.cask.cdap.api.workflow.Value;
 import co.cask.cdap.api.workflow.WorkflowContext;
 import co.cask.cdap.api.workflow.WorkflowToken;
-
-import java.util.Map;
 
 /**
  * Verifier that returns boolean value based on the number of records processed by the {@link PurchaseEventParser}.
  */
 public class PurchaseEventVerifier implements Predicate<WorkflowContext> {
+
+  private static final String TASK_COUNTER_GROUP_NAME = "org.apache.hadoop.mapreduce.TaskCounter";
+  private static final String MAP_INPUT_RECORDS_COUNTER_NAME = "MAP_INPUT_RECORDS";
+  private static final String MAP_OUTPUT_RECORDS_COUNTER_NAME = "MAP_OUTPUT_RECORDS";
 
   @Override
   public boolean apply(WorkflowContext workflowContext) {
@@ -22,21 +25,15 @@ public class PurchaseEventVerifier implements Predicate<WorkflowContext> {
       return false;
     }
 
-    Map<String, Map<String, Long>> hadoopCounters = token.getMapReduceCounters();
-    if (hadoopCounters == null) {
-      return false;
-    }
-
-    Map<String, Long> taskCounter = hadoopCounters.get("org.apache.hadoop.mapreduce.TaskCounter");
-
-    if (taskCounter.containsKey("MAP_INPUT_RECORDS")) {
-      long mapInputRecordNumber = taskCounter.get("MAP_INPUT_RECORDS");
-      long mapOutputRecordNumber = taskCounter.get("MAP_OUTPUT_RECORDS");
+    Value mapInputRecords = token.get(TASK_COUNTER_GROUP_NAME + "." + MAP_INPUT_RECORDS_COUNTER_NAME,
+                                      WorkflowToken.Scope.SYSTEM);
+    Value mapOutputRecords = token.get(TASK_COUNTER_GROUP_NAME + "." + MAP_OUTPUT_RECORDS_COUNTER_NAME,
+                                       WorkflowToken.Scope.SYSTEM);
+    if (mapInputRecords != null && mapOutputRecords != null) {
       // Return true if at least 80% of the records were successfully parsed and emitted
       // by previous map job
-      return (mapOutputRecordNumber >= (mapInputRecordNumber * 80/100));
+      return (mapOutputRecords.getAsLong() >= (mapInputRecords.getAsLong() * 80/100));
     }
-
     return false;
   }
 }
