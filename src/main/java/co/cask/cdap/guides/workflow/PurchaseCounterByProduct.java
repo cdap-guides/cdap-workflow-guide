@@ -2,6 +2,8 @@ package co.cask.cdap.guides.workflow;
 
 import co.cask.cdap.api.ProgramLifecycle;
 import co.cask.cdap.api.common.Bytes;
+import co.cask.cdap.api.data.batch.Input;
+import co.cask.cdap.api.data.batch.Output;
 import co.cask.cdap.api.mapreduce.AbstractMapReduce;
 import co.cask.cdap.api.mapreduce.MapReduceContext;
 import com.google.gson.Gson;
@@ -23,8 +25,6 @@ public class PurchaseCounterByProduct extends AbstractMapReduce {
   @Override
   public void configure() {
     setDescription("Purchases Counter by Product");
-    setInputDataset("purchaseRecords");
-    setOutputDataset("productPurchases");
   }
 
   @Override
@@ -33,6 +33,9 @@ public class PurchaseCounterByProduct extends AbstractMapReduce {
     job.setMapperClass(PerProductMapper.class);
     job.setReducerClass(PerProductReducer.class);
     TimeUnit.SECONDS.sleep(5);
+
+    context.addInput(Input.ofDataset("purchaseRecords"));
+    context.addOutput(Output.ofDataset("productPurchases"));
   }
 
   /**
