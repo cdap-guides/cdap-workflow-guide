@@ -17,6 +17,7 @@
 package co.cask.cdap.guides.workflow;
 
 import co.cask.cdap.api.ProgramLifecycle;
+import co.cask.cdap.api.data.batch.Output;
 import co.cask.cdap.api.data.stream.StreamBatchReadable;
 import co.cask.cdap.api.mapreduce.AbstractMapReduce;
 import co.cask.cdap.api.mapreduce.MapReduceContext;
@@ -43,7 +44,6 @@ public class PurchaseEventParser extends AbstractMapReduce {
   public void configure() {
     setName("PurchaseEventParser");
     setDescription("MapReduce program for parsing the purchase events and storing them in the dataset.");
-    setOutputDataset("purchaseRecords");
   }
 
   @Override
@@ -61,6 +61,7 @@ public class PurchaseEventParser extends AbstractMapReduce {
     final long endTime = context.getLogicalStartTime();
     final long startTime = endTime - TimeUnit.MINUTES.toMillis(60);
     StreamBatchReadable.useStreamInput(context, "purchaseEvents", startTime, endTime);
+    context.addOutput(Output.ofDataset("purchaseRecords"));
   }
 
   // Mapper class to parse the raw purchase events and emit customer and corresponding purchase objects.

@@ -17,6 +17,7 @@
 package co.cask.cdap.guides.workflow;
 
 import co.cask.cdap.api.workflow.AbstractWorkflowAction;
+import co.cask.cdap.api.workflow.Value;
 import co.cask.cdap.api.workflow.WorkflowContext;
 import co.cask.cdap.api.workflow.WorkflowToken;
 import org.slf4j.Logger;
@@ -59,16 +60,11 @@ public class ProblemLogger extends AbstractWorkflowAction {
 
     WorkflowToken token = context.getToken();
 
-    Map<String, Map<String, Long>> hadoopCounters = token.getMapReduceCounters();
-    if (hadoopCounters == null) {
+    Value value = token.get(groupName + "." + counterName);
+    if (value == null) {
       return 0;
     }
 
-    Map<String, Long> taskCounter = hadoopCounters.get(groupName);
-
-    if (taskCounter.containsKey(counterName)) {
-      return taskCounter.get(counterName);
-    }
-    return 0;
+    return value.getAsLong();
   }
 }
