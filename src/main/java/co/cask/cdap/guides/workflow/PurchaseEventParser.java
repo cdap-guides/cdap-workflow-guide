@@ -17,11 +17,11 @@
 package co.cask.cdap.guides.workflow;
 
 import co.cask.cdap.api.ProgramLifecycle;
+import co.cask.cdap.api.common.Bytes;
+import co.cask.cdap.api.data.batch.Input;
 import co.cask.cdap.api.data.batch.Output;
-import co.cask.cdap.api.data.stream.StreamBatchReadable;
 import co.cask.cdap.api.mapreduce.AbstractMapReduce;
 import co.cask.cdap.api.mapreduce.MapReduceContext;
-import co.cask.cdap.api.common.Bytes;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import org.apache.hadoop.io.LongWritable;
@@ -47,7 +47,8 @@ public class PurchaseEventParser extends AbstractMapReduce {
   }
 
   @Override
-  public void beforeSubmit(MapReduceContext context) throws Exception {
+  protected void initialize() throws Exception {
+    MapReduceContext context = getContext();
     Job job = context.getHadoopJob();
     job.setMapperClass(PurchaseEventParserMapper.class);
     job.setReducerClass(PurchaseEventParserReducer.class);
@@ -60,7 +61,7 @@ public class PurchaseEventParser extends AbstractMapReduce {
     // Read the purchase events from the last 60 minutes as input to the mapper.
     final long endTime = context.getLogicalStartTime();
     final long startTime = endTime - TimeUnit.MINUTES.toMillis(60);
-    StreamBatchReadable.useStreamInput(context, "purchaseEvents", startTime, endTime);
+    context.addInput(Input.ofStream("purchaseEvents", startTime, endTime));
     context.addOutput(Output.ofDataset("purchaseRecords"));
   }
 
