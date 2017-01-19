@@ -243,40 +243,40 @@ The ``PurchaseWorkflowApp`` can be built and packaged using the Apache Maven com
 
   $ mvn clean package
 
-Note that the remaining commands assume that the ``cdap-cli.sh`` script is
+Note that the remaining commands assume that the ``cdap`` script is
 available on your PATH. If this is not the case, please add it::
 
   $ export PATH=$PATH:<CDAP home>/bin
 
 If you haven't already started a standalone CDAP installation, start it with the command::
 
-  $ cdap.sh start
+  $ cdap sdk start
 
 We can then deploy the application to the standalone CDAP installation::
 
-  $ cdap-cli.sh load artifact target/cdap-workflow-guide-<version>.jar
-  $ cdap-cli.sh create app PurchaseWorkflowApp cdap-workflow-guide <version> user
+  $ cdap cli load artifact target/cdap-workflow-guide-<version>.jar
+  $ cdap cli create app PurchaseWorkflowApp cdap-workflow-guide <version> user
 
 Next, we will send some sample purchase events into the stream
 for processing::
 
-  $ cdap-cli.sh send stream purchaseEvents '"bob bought 3 apples for $30"'
-  $ cdap-cli.sh send stream purchaseEvents '"joe bought 1 apple for $100"'
-  $ cdap-cli.sh send stream purchaseEvents '"joe bought 10 pineapples for $20"'
-  $ cdap-cli.sh send stream purchaseEvents '"cat bought 3 bottles for $12"'
-  $ cdap-cli.sh send stream purchaseEvents '"cat bought 2 pops for $14"'
+  $ cdap cli send stream purchaseEvents '"bob bought 3 apples for $30"'
+  $ cdap cli send stream purchaseEvents '"joe bought 1 apple for $100"'
+  $ cdap cli send stream purchaseEvents '"joe bought 10 pineapples for $20"'
+  $ cdap cli send stream purchaseEvents '"cat bought 3 bottles for $12"'
+  $ cdap cli send stream purchaseEvents '"cat bought 2 pops for $14"'
 
 We can now start the Workflow to process the events that were
 ingested::
 
-  $ cdap-cli.sh start workflow PurchaseWorkflowApp.PurchaseWorkflow
+  $ cdap cli start workflow PurchaseWorkflowApp.PurchaseWorkflow
 
 The Workflow will take a couple of minutes to execute.
 
 We can then start the ``PurchaseResultService`` and query the processed
 results::
 
-  $ cdap-cli.sh start service PurchaseWorkflowApp.PurchaseResultService
+  $ cdap cli start service PurchaseWorkflowApp.PurchaseResultService
 
 - Retrieve the purchase records for customer ``joe``::
 
@@ -319,7 +319,7 @@ Have a question? Discuss at the `CDAP User Mailing List <https://groups.google.c
 License
 =======
 
-Copyright © 2015 Cask Data, Inc.
+Copyright © 2015-2017 Cask Data, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may
 not use this file except in compliance with the License. You may obtain
