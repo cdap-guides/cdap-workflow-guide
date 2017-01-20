@@ -280,7 +280,7 @@ results::
 
 - Retrieve the purchase records for customer ``joe``::
 
-   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchaserecords/joe
+   $ curl http://localhost:11015/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchaserecords/joe
 
   Example output::
 
@@ -288,7 +288,7 @@ results::
 
 - Retrieve the total purchases made by customer ``joe``::
 
-   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/customers/joe
+   $ curl http://localhost:11015/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/customers/joe
 
   Example output::
 
@@ -296,7 +296,7 @@ results::
 
 - Retrieve the total purchases made for product ``apple``::
 
-   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/products/apple
+   $ curl http://localhost:11015/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/products/apple
 
   Example output::
 
