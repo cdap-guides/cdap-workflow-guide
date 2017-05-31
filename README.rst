@@ -2,7 +2,7 @@
 Batch Data Processing with CDAP using Workflow
 ==============================================
 
-The Workflow system in `Cask Data Application Platform (CDAP) <http://cdap.io>`__
+The Workflow system in `Cask Data Application Platform (CDAP) <https://cask.co>`__
 allows specifying, executing, scheduling, and monitoring complex series of jobs
 and tasks. In this guide, you will learn how it can be used to execute the
 `MapReduce <http://research.google.com/archive/mapreduce.html>`__
@@ -12,7 +12,7 @@ What You Will Build
 ===================
 
 This guide will take you through building a
-`CDAP application <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/applications.html>`__
+`CDAP application <https://docs.cask.co/cdap/current/en/developers-manual/building-blocks/applications.html>`__
 that uses ingested raw purchase events (of the form '``<name> bought <n> <item>s for $<price>``', which are parsed
 using a primitive parser for sentences) to compute in parallel the total purchases made by each customer along with
 the total purchases made for each product.
@@ -20,25 +20,25 @@ the total purchases made for each product.
 You will:
 
 - Build ``PurchaseEventParser``, a
-  `MapReduce program <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
+  `MapReduce program <https://docs.cask.co/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
   to parse the raw purchase events and create ``Purchase`` objects from them;
 - Build ``PurchaseCounterByCustomer``, a
-  `MapReduce program <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
+  `MapReduce program <https://docs.cask.co/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
   to count the purchases made per customer;
 - Build ``PurchaseCounterByProduct``, a
-  `MapReduce program <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
+  `MapReduce program <https://docs.cask.co/cdap/current/en/developers-manual/building-blocks/mapreduce-programs.html>`__
   to count the purchases made per product;
 - Build ``PurchaseWorkflow``, a
-  `Workflow <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/workflows.html>`__
+  `Workflow <https://docs.cask.co/cdap/current/en/developers-manual/building-blocks/workflows.html>`__
   which will first execute the MapReduce program ``PurchaseEventParser``. If the predicate ``PurchaseEventVerifier``,
   which uses the MapReduce counters emitted by the PEP to determine data quality, evaluates to true, the workflow will
   in parallel execute the MapReduce program ``PurchaseCounterByCustomer`` and ``PurchaseCounterByProduct`` otherwise,
   it will execute the action ``ProblemLogger``;
 - Use
-  `Datasets <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/datasets/index.html>`__
+  `Datasets <https://docs.cask.co/cdap/current/en/developers-manual/building-blocks/datasets/index.html>`__
   to persist results of the MapReduce programs; and
 - Build a
-  `Service <http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/services.html>`__
+  `Service <https://docs.cask.co/cdap/current/en/developers-manual/building-blocks/services.html>`__
   to serve the results via HTTP.
 
 What You Will Need
@@ -46,7 +46,7 @@ What You Will Need
 
 - `JDK 7 or 8 <http://www.oracle.com/technetwork/java/javase/downloads/index.html>`__
 - `Apache Maven 3.1+ <http://maven.apache.org/>`__
-- `CDAP SDK <http://docs.cdap.io/cdap/current/en/developers-manual/getting-started/standalone/index.html>`__
+- `CDAP Local Sandbox <https://docs.cask.co/cdap/current/en/developers-manual/getting-started/local-sandbox/index.html>`__
 
 Let’s Build It!
 ===============
@@ -94,7 +94,7 @@ standard Maven project structure for all of the source code files::
 
 The CDAP application is identified by the ``PurchaseWorkflowApp`` class. This
 class extends an `AbstractApplication
-<http://docs.cdap.io/cdap/current/en/reference-manual/javadocs/co/cask/cdap/api/app/AbstractApplication.html>`__,
+<https://docs.cask.co/cdap/current/en/reference-manual/javadocs/co/cask/cdap/api/app/AbstractApplication.html>`__,
 and overrides the ``configure`` method to define all of the application components:
 
 .. code:: java
@@ -124,9 +124,9 @@ and overrides the ``configure`` method to define all of the application componen
       createDataset("productPurchases", KeyValueTable.class);
     }
   }
-  
+
 The ``PurchaseWorkflowApp`` application defines a new `Stream
-<http://docs.cdap.io/cdap/current/en/developers-manual/building-blocks/streams.html>`__
+<https://docs.cask.co/cdap/current/en/developers-manual/building-blocks/streams.html>`__
 where purchase events are ingested. Once the data is
 ingested, the events can be processed in real time or batch. In our
 application, we will process the events in batch using the
@@ -153,7 +153,7 @@ Finally, the application adds a service for querying the results from the Datase
 Let's take a closer look at the Workflow.
 
 The ``PurchaseWorkflow`` extends an `AbstractWorkflow
-<http://docs.cdap.io/cdap/current/en/reference-manual/javadocs/co/cask/cdap/api/workflow/AbstractWorkflow.html>`__
+<https://docs.cask.co/cdap/current/en/reference-manual/javadocs/co/cask/cdap/api/workflow/AbstractWorkflow.html>`__
 class and overrides the ``configure`` method:
 
 .. code:: java
@@ -243,44 +243,44 @@ The ``PurchaseWorkflowApp`` can be built and packaged using the Apache Maven com
 
   $ mvn clean package
 
-Note that the remaining commands assume that the ``cdap-cli.sh`` script is
+Note that the remaining commands assume that the ``cdap`` script is
 available on your PATH. If this is not the case, please add it::
 
   $ export PATH=$PATH:<CDAP home>/bin
 
-If you haven't already started a standalone CDAP installation, start it with the command::
+If you haven't already started a CDAP Local Sandbox installation, start it with the command::
 
-  $ cdap.sh start
+  $ cdap sandbox start
 
-We can then deploy the application to the standalone CDAP installation::
+We can then deploy the application to the CDAP Local Sandbox installation::
 
-  $ cdap-cli.sh load artifact target/cdap-workflow-guide-<version>.jar
-  $ cdap-cli.sh create app PurchaseWorkflowApp cdap-workflow-guide <version> user
+  $ cdap cli load artifact target/cdap-workflow-guide-<version>.jar
+  $ cdap cli create app PurchaseWorkflowApp cdap-workflow-guide <version> user
 
 Next, we will send some sample purchase events into the stream
 for processing::
 
-  $ cdap-cli.sh send stream purchaseEvents '"bob bought 3 apples for $30"'
-  $ cdap-cli.sh send stream purchaseEvents '"joe bought 1 apple for $100"'
-  $ cdap-cli.sh send stream purchaseEvents '"joe bought 10 pineapples for $20"'
-  $ cdap-cli.sh send stream purchaseEvents '"cat bought 3 bottles for $12"'
-  $ cdap-cli.sh send stream purchaseEvents '"cat bought 2 pops for $14"'
+  $ cdap cli send stream purchaseEvents '"bob bought 3 apples for $30"'
+  $ cdap cli send stream purchaseEvents '"joe bought 1 apple for $100"'
+  $ cdap cli send stream purchaseEvents '"joe bought 10 pineapples for $20"'
+  $ cdap cli send stream purchaseEvents '"cat bought 3 bottles for $12"'
+  $ cdap cli send stream purchaseEvents '"cat bought 2 pops for $14"'
 
 We can now start the Workflow to process the events that were
 ingested::
 
-  $ cdap-cli.sh start workflow PurchaseWorkflowApp.PurchaseWorkflow
+  $ cdap cli start workflow PurchaseWorkflowApp.PurchaseWorkflow
 
 The Workflow will take a couple of minutes to execute.
 
 We can then start the ``PurchaseResultService`` and query the processed
 results::
 
-  $ cdap-cli.sh start service PurchaseWorkflowApp.PurchaseResultService
+  $ cdap cli start service PurchaseWorkflowApp.PurchaseResultService
 
 - Retrieve the purchase records for customer ``joe``::
 
-   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchaserecords/joe
+   $ curl http://localhost:11015/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchaserecords/joe
 
   Example output::
 
@@ -288,7 +288,7 @@ results::
 
 - Retrieve the total purchases made by customer ``joe``::
 
-   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/customers/joe
+   $ curl http://localhost:11015/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/customers/joe
 
   Example output::
 
@@ -296,7 +296,7 @@ results::
 
 - Retrieve the total purchases made for product ``apple``::
 
-   $ curl http://localhost:10000/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/products/apple
+   $ curl http://localhost:11015/v3/namespaces/default/apps/PurchaseWorkflowApp/services/PurchaseResultService/methods/purchases/products/apple
 
   Example output::
 
@@ -309,7 +309,7 @@ Related Topics
 ==============
 
 - `CDAP MapReduce Guide <https://github.com/cdap-guides/cdap-mapreduce-guide>`__ tutorial for MapReduce
-- `Wise: Web Analytics <http://docs.cdap.io/cdap/current/en/examples-manual/tutorials/wise.html>`__ tutorial, part of CDAP
+- `Wise: Web Analytics <https://docs.cask.co/cdap/current/en/examples-manual/tutorials/wise.html>`__ tutorial, part of CDAP
 
 Share and Discuss!
 ==================
@@ -319,7 +319,7 @@ Have a question? Discuss at the `CDAP User Mailing List <https://groups.google.c
 License
 =======
 
-Copyright © 2015 Cask Data, Inc.
+Copyright © 2015-2017 Cask Data, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may
 not use this file except in compliance with the License. You may obtain
